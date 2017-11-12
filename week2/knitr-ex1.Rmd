@@ -1,0 +1,76 @@
+# My First knitr Document
+
+## Introduction
+
+### Basic
+
+This is some text (i.e. a "text chunk")
+
+### R Code Chunk
+
+Here is a code chunk
+```{r}
+set.seed(1)
+x <- rnorm(100)
+mean(x)
+```
+
+
+### Values in Text
+
+```{r computetime, echo=FALSE}
+time <- format(Sys.time(), "%a %b %d %X %Y")
+rand <- rnorm(1)
+```
+
+The current time is `r time`.  My favorite randome number is `r rand`
+
+### Plotting
+
+Let's first simulate some data
+```{r simulatedata, echo=TRUE}
+x <- rnorm(100); y <- x +rnorm(100, sd=0.5)
+```
+
+Here is a scatterplot of the data.
+```{r scatterplot, fig.height=4}
+par(mar=c(5,4,1,1), las = 1)
+plot(x,y,main="My simluated data")
+```
+
+### Tables using xtable
+
+```{r fitmodel}
+library(datasets)
+
+data(airquality)
+fit <- lm(Ozone ~ Wind + Temp + Solar.R, data=airquality)
+```
+
+Here is a table of regression coefficients.
+
+```{r showtable, results="asis"}
+library(xtable)
+xt <- xtable(summary(fit))
+print(xt, type="html")
+```
+
+### Global Options
+
+```
+  '''{r setoptions, echo=FALSE}
+  opts_chuck$set(echo = FALSE, results = "hide")
+  ''' 
+```
+
+### Common Options  
+  * Output  
+      * `results`: `"asis"`, `"hide"`  
+      * `echo`: `TRUE`, `FALSE`  
+  * Figures  %>% 
+      * `fig.height`: numeric  
+      * `fig.widht`: numeric  
+      
+### Caching Computations  
+  * `cache=TRUE` can be set on chunk by chunk basis  
+  * After first run, results are cached
